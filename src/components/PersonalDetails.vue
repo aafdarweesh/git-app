@@ -1,27 +1,33 @@
 <template>
   <div>
-    <a-row type="flex" justify="space-around">
-      <a-col :span="7">
-        <a-card hoverable>
-          <img
-            slot="cover"
-            alt="example"
-            :src="avatar_url"
-          />
-          <a-card-meta :title="name" :description="login">
-            <a-icon type="shop"/>
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col :span="15">
-        <a-card hoverable>
-
-          <div v-for="(value, name) in items" v-bind:key="name">
-            <a-timeline-item> <strong> {{name}} </strong> : {{value}} </a-timeline-item>
-          </div>
-        </a-card>
-      </a-col>
-    </a-row>
+    <div v-if="loadingPage === true" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <a-spin tip="Loading..."/>
+    </div>
+    <div v-else>
+      <a-row type="flex" justify="space-around">
+        <a-col :span="7">
+          <a-card hoverable>
+            <img
+              slot="cover"
+              alt="example"
+              :src="avatar_url"
+            />
+            <a-card-meta :title="name" :description="login">
+              <a-icon type="shop"/>
+            </a-card-meta>
+          </a-card>
+        </a-col>
+        <a-col :span="15">
+          <a-card hoverable>
+            <h2>Personal Details:</h2>
+            <br/>
+            <div v-for="(value, name) in items" v-bind:key="name">
+              <a-timeline-item> <strong> {{name}} </strong> : {{value}} </a-timeline-item>
+            </div>
+          </a-card>
+        </a-col>
+      </a-row>
+    </div>
   </div>
 </template>
 
@@ -69,7 +75,7 @@ export default {
       login: String,
   },
   data: () => ({
-      there_is_data: false,
+      loadingPage: true,
       // collapsed: false,
       name: "null",
       // company: "null",
@@ -103,6 +109,7 @@ export default {
                 // this.location = response.data.location === null ? "null" : response.data.location;
 
                 this.items = response.data;
+                this.loadingPage = false;
         });
       },
   },
@@ -113,4 +120,9 @@ export default {
 </script>
 <style>
 @import '../../node_modules/ant-design-vue/dist/antd.css';
+.spin-content {
+  border: 1px solid #91d5ff;
+  background-color: #e6f7ff;
+  padding: 30px;
+}
 </style>

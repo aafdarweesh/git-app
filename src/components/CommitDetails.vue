@@ -1,47 +1,52 @@
 <template>
   <div>
-    <a-row type="flex" justify="space-around">
-      <a-col :span="7">
-        <a-card hoverable>
-          <img
-            slot="cover"
-            alt="example"
-            :src="avatar_url"
-            @click="goToPersonalDetails(login)"
-          />
-          <a-card-meta :title="name" :description="login">
-            <a-icon type="shop"/>
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col :span="15">
-        <a-card>
-          <div>
-            <h2><strong>{{title}}</strong> </h2>
-            <h3>{{message}}</h3>
-            <a-icon type="github"></a-icon> <a :href="rep_url">commit link</a>
-          </div>
-        </a-card>
-        <br />
-        <a-card>
-          <div>
-          <h3> 
-            Showing  <strong>{{list_of_files.length}} Changed</strong> files with 
-            <strong>{{stats.additions}}</strong> additions and <strong>{{stats.deletions}}</strong> deletions.
-          </h3>
-          
-            <h2><strong>List of Modified files: </strong></h2>
-          </div>
-          <div v-for="(file, index) in list_of_files" v-bind:key="index">
-            <a-timeline-item>
-              <strong> {{file.filename}} </strong>
-              <a-icon type="plus-circle"></a-icon> {{file.additions}}
-              <a-icon type="minus-circle"></a-icon> {{file.deletions}}
-            </a-timeline-item>
-          </div>
-        </a-card>
-      </a-col>
-    </a-row>
+    <div v-if="loadingPage === true" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <a-spin tip="Loading..."/>
+    </div>
+    <div v-else>
+      <a-row type="flex" justify="space-around">
+        <a-col :span="7">
+          <a-card hoverable>
+            <img
+              slot="cover"
+              alt="example"
+              :src="avatar_url"
+              @click="goToPersonalDetails(login)"
+            />
+            <a-card-meta :title="name" :description="login">
+              <a-icon type="shop"/>
+            </a-card-meta>
+          </a-card>
+        </a-col>
+        <a-col :span="15">
+          <a-card>
+            <div>
+              <h2><strong>{{title}}</strong> </h2>
+              <h3>{{message}}</h3>
+              <a-icon type="github"></a-icon> <a :href="rep_url">commit link</a>
+            </div>
+          </a-card>
+          <br />
+          <a-card>
+            <div>
+            <h3> 
+              Showing  <strong>{{list_of_files.length}} Changed</strong> files with 
+              <strong>{{stats.additions}}</strong> additions and <strong>{{stats.deletions}}</strong> deletions.
+            </h3>
+            
+              <h2><strong>List of Modified files: </strong></h2>
+            </div>
+            <div v-for="(file, index) in list_of_files" v-bind:key="index">
+              <a-timeline-item>
+                <strong> {{file.filename}} </strong>
+                <a-icon type="plus-circle"></a-icon> {{file.additions}}
+                <a-icon type="minus-circle"></a-icon> {{file.deletions}}
+              </a-timeline-item>
+            </div>
+          </a-card>
+        </a-col>
+      </a-row>
+    </div>
   </div>
 </template>
 
@@ -89,7 +94,7 @@ export default {
       sha: String,
   },
   data: () => ({
-      there_is_data: false,
+      loadingPage: true,
       name: "null",
       message: "",
       title: "",
@@ -122,6 +127,7 @@ export default {
                 };
                 console.log(files);
                 this.list_of_files = files;
+                this.loadingPage = false;
         });
       },
       goToPersonalDetails(login){
@@ -136,4 +142,9 @@ export default {
 </script>
 <style>
 @import '../../node_modules/ant-design-vue/dist/antd.css';
+.spin-content {
+  border: 1px solid #91d5ff;
+  background-color: #e6f7ff;
+  padding: 30px;
+}
 </style>
