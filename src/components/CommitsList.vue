@@ -21,7 +21,7 @@
         </div>
         <div v-else>
             <a-list item-layout="horizontal" v-bind:data-source="items">
-            <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item slot="renderItem" slot-scope="item">
                 <a-list-item-meta
                     :description="item.message"
                 >
