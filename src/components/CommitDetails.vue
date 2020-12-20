@@ -58,13 +58,20 @@ import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 import PersonalDetails from "./PersonalDetails.vue"
 import CommitDetails from "./CommitDetails.vue"
+import CommitsList from "./CommitsList.vue"
 import App from "../App.vue"
 
 const routes = [
   {
-    path: '/',
+    path: '/App',
     name: 'App',
     component: App
+  },
+  {
+    path: '/',
+    name: 'commits-list',
+    component: CommitsList,
+    props: true
   },
   {
     path: '/commit_details/:sha',

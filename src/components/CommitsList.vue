@@ -1,5 +1,21 @@
 <template>
     <div>
+        <a-row type="flex" justify="space-around">
+        <a-col :span="7">
+        <span>
+            <a-input v-model="repository" placeholder="login...">
+              <a-icon slot="prefix" type="diff" />
+            </a-input>
+        </span>
+        </a-col>
+        <a-col :span="4">
+        <span>
+            <a-button @click="requester">
+                Submit
+            </a-button>
+        </span>
+        </a-col>
+        </a-row>
         <div v-if="loadingPage === true" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <a-spin tip="Loading..."/>
         </div>
@@ -17,13 +33,14 @@
                     :src="item.author.avatar_url"
                     icon="user"
                     @click="goToPersonalDetails(item.author.login)"
+                    :title="item.author.name"
                 >
                 
                 </a-avatar>
                 </a-list-item-meta>
                 <div>
-                <a-button v-on:click="goToCommitDetails(item.hash)">{{item.hash.substr(0,7)}}</a-button>
-                <a-button v-on:click="goToCommitDetails(item.parent_hash)">{{item.parent_hash.substr(0,7)}}</a-button>
+                <a-button title="Hash" v-on:click="goToCommitDetails(item.hash)">{{item.hash.substr(0,7)}}</a-button>
+                <a-button title="Parent Hash" v-on:click="goToCommitDetails(item.parent_hash)">{{item.parent_hash.substr(0,7)}}</a-button>
                 </div>
             </a-list-item>
             </a-list>
@@ -88,14 +105,18 @@ export default {
   props: {
       routes: Array,
       router: VueRouter,
+      repo: String,
+      repo1: String,
   },
   data: () => ({
       loadingPage: true,
+      repository: "facebook/react",
       items:[{
            id:0,
            author: {
              login: "",
              avatar_url: "",
+             name: "",
            },
            message: "message",
            title: "",
@@ -108,7 +129,8 @@ export default {
   }),
   methods: {
       requester: function() {
-            var pages_api = "https://api.github.com/repos/facebook/react/stats/commit_activity";
+            this.loadingPage = true;
+            var pages_api = "https://api.github.com/repos/" + this.repository + "/stats/commit_activity";
             axios.get(pages_api).then((response) =>{
                 var total_pages = 0;
                 for(var obj in response.data){
@@ -116,24 +138,29 @@ export default {
                 }
                 this.total_nubmer_of_pages = Math.ceil(total_pages/this.commits_per_page);
             });
-
-            var api = "https://api.github.com/repos/facebook/react/commits?per_page=" + this.commits_per_page.toString() + "&page=" + this.page_number.toString();
+            console.log(this.repository)
+            var api = "https://api.github.com/repos/" + this.repository.toString() + "/commits?per_page=" + this.commits_per_page.toString() + "&page=" + this.page_number.toString();
             // console.log(api);
             axios.get(api).then((response) => {
                 console.log(response.data);
                 const restultArray = [];
                 for (let obj in response.data) {
                     const commit_time = this.calculate_commit_time(response.data[obj].commit.committer.date);
-
-                    restultArray.push({
+                    try{
+                        restultArray.push({
                         id: obj,
                         author: { login: response.data[obj].author.login,
-                          avatar_url: response.data[obj].author.avatar_url },
+                          avatar_url: response.data[obj].author.avatar_url,
+                          name: response.data[obj].commit.author.name},
                         title: response.data[obj].commit.message.split("\n\n")[0],
                         message: response.data[obj].author.login + ": commited " + commit_time,
                         hash: response.data[obj].sha,
                         parent_hash: response.data[obj].parents[0].sha,
                         });
+                    }catch{
+                        console.log("Error");
+                    }
+                    
                 }
                 this.items = restultArray;
                 console.log(this.items);

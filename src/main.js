@@ -21,7 +21,8 @@ const routes = [
   {
     path: '/',
     name: 'commits-list',
-    component: CommitsList
+    component: CommitsList,
+    props: true
   },
   {
     path: '/commit_details/:sha',
@@ -42,6 +43,10 @@ const router = new VueRouter({
 
  new Vue({
    router,
+   data: () => ({
+      login: "",
+      repo: "facebook/react",
+   }),
    render: h => h(App, {props: {routes: routes}, router: router}),
   }).$mount('#app')
 
