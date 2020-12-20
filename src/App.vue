@@ -13,7 +13,7 @@
         </a-menu-item>
         <a-menu-item key="2">
           <span>
-            <a-input v-model="login" v-on:change="()=> repo = ''" placeholder="login...">
+            <a-input v-model="login" v-on:change="()=> repo = ''" placeholder="login..." title="Search for a user">
               <a-icon slot="prefix" type="user" />
             </a-input>
           </span>

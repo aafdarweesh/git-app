@@ -3,7 +3,7 @@
         <a-row type="flex" justify="space-around">
         <a-col :span="7">
         <span>
-            <a-input v-model="repository" placeholder="login...">
+            <a-input v-model="repository" placeholder="owner/repository..." title="Search for repository">
               <a-icon slot="prefix" type="diff" />
             </a-input>
         </span>
