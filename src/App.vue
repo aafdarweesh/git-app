@@ -57,47 +57,19 @@
 <script>
 import VueRouter from 'vue-router'
 
-import PersonalDetails from "./components/PersonalDetails.vue"
-import CommitDetails from "./components/CommitDetails.vue"
-import CommitsList from "./components/CommitsList.vue"
-
-const routes = [
-  {
-    path: '/',
-    name: 'commits-list',
-    component: CommitsList,
-    props: true
-  },
-  {
-    path: '/commit_details/:sha',
-    name: 'commit_details',
-    component: CommitDetails,
-    props: true
-  },
-  {
-    path: '/personal_details/:login',
-    name: 'personal_details',
-    component: PersonalDetails,
-    props: true
-  }
-];
-const router = new VueRouter({
-  routes
-})
+// Will be used for redirection.
+const router = new VueRouter()
 
 export default {
   name: 'App',
   components: {
   },
   props: {
-      routes: Array,
-      router: VueRouter,
   },
   data: () => ({
     no_data: false,
     collapsed: false,
     login: "",
-    repo: "",
   }),
   methods: {
     goToPersonalDetails(login){
@@ -109,43 +81,22 @@ export default {
         router.go('/')
      },
     goTo(){
-      this.no_data = false;
       if(this.login != null && this.login != ""){
-        this.$root.$data.login = this.login;
         this.goToPersonalDetails(this.login);
       }
-      // else{
-      //    this.$root.$data.repo = this.repo;
-      // //   console.log(this.$root.$data.repo);
-      //    this.goToCommitsList(this.repo);
-      // }
     }
   },
-  // beforeCreate(){
-  //   this.goToCommitsList("facebook/react");
-  // },
 }
 </script>
 
 <style>
 @import '../node_modules/ant-design-vue/dist/antd.css';
-/* .fade-enter-active,
-.fade-leave-active {
-  transition-duration: 0.5s;
-  transition-property: opacity;
-  transition-timing-function: ease;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0
-} */
 .fade-enter, .fade-leave-to{
   transition: translateX(3em);
   opacity: 0;
 }
 .fade-enter-active, .fade-leave-active{
-  transition: all .3s ease;
+  transition: all .5s ease;
 }
 
 #components-layout-demo-custom-trigger .trigger {

@@ -1,11 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
 import Antd from 'ant-design-vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 import VueRouter from 'vue-router'
 import PersonalDetails from "./components/PersonalDetails"
@@ -14,7 +11,6 @@ import CommitsList from "./components/CommitsList"
 
 //import axios from 'axios'
 Vue.use(VueRouter)
-Vue.use(ElementUI);
 Vue.use(Antd);
 
 const routes = [
@@ -47,7 +43,7 @@ const router = new VueRouter({
       login: "",
       repo: "facebook/react",
    }),
-   render: h => h(App, {props: {routes: routes}, router: router}),
+   render: h => h(App),
   }).$mount('#app')
 
 

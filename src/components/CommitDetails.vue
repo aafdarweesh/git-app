@@ -56,46 +56,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import VueRouter from 'vue-router'
-import PersonalDetails from "./PersonalDetails.vue"
-import CommitDetails from "./CommitDetails.vue"
-import CommitsList from "./CommitsList.vue"
-import App from "../App.vue"
 
-const routes = [
-  {
-    path: '/App',
-    name: 'App',
-    component: App
-  },
-  {
-    path: '/',
-    name: 'commits-list',
-    component: CommitsList,
-    props: true
-  },
-  {
-    path: '/commit_details/:sha',
-    name: 'commit_details',
-    component: CommitDetails,
-    props: true
-  },
-  {
-    path: '/personal_details/:login',
-    name: 'personal_details',
-    component: PersonalDetails,
-    props: true
-  }
-];
-const router = new VueRouter({
-  routes
-})
+// Will be used for redirection.
+const router = new VueRouter()
 
 
 export default {
   name: 'CommitDetails',
   components: {
-    CommitDetails
-    
   },
   props: {
       sha: String,
@@ -113,6 +81,7 @@ export default {
       list_of_files: [],
   }),
   methods: {
+      // Requesting the Commit details from the Github API
       requester: function() {
             var api = "https://api.github.com/repos/facebook/react/commits/" + this.sha.toString();
             axios.get(api).then((response) => {
@@ -137,6 +106,7 @@ export default {
                 this.loadingPage = false;
         });
       },
+      // Redirection to Personal Details Page
       goToPersonalDetails(login){
         router.push('/personal_details/'+login)
         router.go('/personal_details/'+login)

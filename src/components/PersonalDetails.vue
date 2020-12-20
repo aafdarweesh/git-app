@@ -37,63 +37,22 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import VueRouter from 'vue-router'
-import PersonalDetails from "./PersonalDetails.vue"
-import CommitDetails from "./CommitDetails.vue"
-import CommitsList from "./CommitsList.vue"
-import App from "../App.vue"
 
-const routes = [
-  {
-    path: '/App',
-    name: 'App',
-    component: App
-  },
-  {
-    path: '/',
-    name: 'commits-list',
-    component: CommitsList,
-    props: true
-  },
-  {
-    path: '/commit_details/:sha',
-    name: 'commit_details',
-    component: CommitDetails,
-    props: true
-  },
-  {
-    path: '/personal_details/:login',
-    name: 'personal_details',
-    component: PersonalDetails,
-    props: true
-  }
-];
-const router = new VueRouter({
-  routes
-})
+// Will be used for redirection.
+const router = new VueRouter()
 
 
 export default {
   name: 'PersonalDetails',
-  components: {
-    PersonalDetails
-    
+  components: {    
   },
   props: {
       login: String,
   },
   data: () => ({
       loadingPage: true,
-      // collapsed: false,
       name: "null",
-      // company: "null",
       avatar_url: "null",
-      // email: "null",
-      // location: "null",
-      // public_repos_counter: "null",
-      // followers: "null",
-      // following: "null",
-      // created_at: "null",
-      // updated_at: "null",
       items:{
         // following: "null",
         // created_at: "null",
@@ -101,25 +60,19 @@ export default {
       },
   }),
   methods: {
+      // Requesting the Commit details from the Github API
       requester: function() {
             var api = "https://api.github.com/users/" + this.login.toString();
             axios.get(api).then((response) => {
                 console.log(response.data);
                 this.name = response.data.name;
-                // this.company = response.data.company;
                 this.avatar_url = response.data.avatar_url;
-                // this.public_repos_counter = response.data.public_repos_counter;
-                // this.followers = response.data.followers  === null ? "null" : response.data.location;
-                // this.following = response.data.following  === null ? "null" : response.data.location;
-                // this.created_at = response.data.created_at  === null ? "null" : response.data.location;
-                // this.updated_at = response.data.updated_at  === null ? "null" : response.data.location;
-                // this.location = response.data.location === null ? "null" : response.data.location;
-
                 this.items = response.data;
                 this.loadingPage = false;
         });
       },
   },
+  // Upon Mounting
   beforeMount(){
     this.requester()
   },
